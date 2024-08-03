@@ -12,7 +12,14 @@ const loginUser = zod.object({
     password:zod.string()
 })
 
+const updateBody = zod.object({
+    firstName:zod.string().optional(),
+    lastName:zod.string().optional(),
+    password:zod.string().optional()
+})
+
 module.exports = {
     userType,
-    loginUser
+    loginUser,
+    updateBody
 }
