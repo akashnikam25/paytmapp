@@ -1,6 +1,9 @@
 const { Schema,mongoose } = require('mongoose');
+const dotenv = require('dotenv');
+dotenv.config();
 
-mongoose.connect("mongodb+srv://akash:Akashnikam%4025@cluster0.ljso97z.mongodb.net/paytm")
+const URL = process.env.URL
+mongoose.connect(URL)
 // Create a Schema for Users
 const userSchema = new mongoose.Schema({
     username: {
