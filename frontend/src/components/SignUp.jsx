@@ -2,6 +2,11 @@ import { useState } from 'react'
 import '../App.css'
 import axios from 'axios'
 import { useNavigate } from "react-router-dom";
+import { Heading } from './Heading';
+import { SubHeading } from './SubHeading';
+import { InputBox } from './Inputbox';
+import { Button } from './Button';
+import { BottomWarning } from './BottomWarning';
 
 export const SignUp = ()=>{
     const [firstName, setFirstName] = useState()
@@ -9,23 +14,26 @@ export const SignUp = ()=>{
     const [password, setPassword] = useState()
     const [userName, setUserName] = useState()
     const navigator = useNavigate();
-
-    return <>
-     <div>
-        <h1>Sign Up</h1>
-        <label htmlFor="FirstName">First Name:</label><input type="text" placeholder='John' onChange={(e)=>{
+   return <div className="bg-slate-300 h-screen flex justify-center">
+    <div className="flex flex-col justify-center">
+      <div className="rounded-lg bg-white w-80 text-center p-2 h-max px-4">
+        <Heading label={"Sign up"} />
+        <SubHeading label={"Enter your infromation to create an account"} />
+        <InputBox placeholder="John" label={"First Name"} onChange={(e)=>{
             setFirstName(e.target.value)
-        }} /><br /><br />
-        <label htmlFor="LastName">Last Name:</label><input type="text" placeholder='Doe' onChange={(e)=>{
+            console.log(firstName)
+        }} />
+        <InputBox placeholder="Doe" label={"Last Name"} onChange={(e)=>{
             setLastName(e.target.value)
-        }}/><br /><br />
-        <label htmlFor="Email">Email:</label><input type="email" placeholder='johndoe@example.com' onChange={(e)=>{
+        }}/>
+        <InputBox placeholder="johndow@gmail.com" label={"Email"}  onChange={(e)=>{
             setUserName(e.target.value)
-        }}/><br /><br />
-        <label htmlFor="Password">Password:</label><input type="password" onChange={(e)=>{
+        }}/>
+        <InputBox placeholder="123456" label={"Password"} onChange={(e)=>{
             setPassword(e.target.value)
-        }} /><br /><br />
-        <button type="submit" onClick={()=>{
+        }}/>
+        <div className="pt-4">
+          <Button label={"Sign up"}  onClick={()=>{
             axios({
                 url:"http://localhost:3000/api/v1/user/signup",
                 method:"POST",
@@ -45,11 +53,10 @@ export const SignUp = ()=>{
                
                 console.log("error",error)
             })
-        }}>Sign Up</button>
-
-        <div>
-            Already have an account? <a href="/signin">Sign In</a>
+        }}/>
         </div>
-     </div>
-    </>
+        <BottomWarning label={"Already have an account?"} buttonText={"Sign in"} to={"/signin"} />
+      </div>
+    </div>
+  </div>
 }

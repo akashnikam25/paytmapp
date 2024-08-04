@@ -2,22 +2,29 @@ import { useNavigate } from "react-router-dom";
 import { useState } from 'react'
 import '../App.css'
 import axios from 'axios'
+import { Heading } from "./Heading";
+import { SubHeading } from "./SubHeading";
+import { InputBox } from "./Inputbox";
+import { Button } from "./Button";
+import { BottomWarning } from "./BottomWarning";
 
 export const SignIn = ()=>{
     const [password, setPassword] = useState()
     const [userName, setUserName] = useState()
     const navigator = useNavigate();
-    return <>
-      <div>
-        <h1>Sign In</h1>
-        <label htmlFor="Email">Email:</label><input type="email" placeholder='johndoe@example.com' onChange={(e)=>{
+    return <div className="bg-slate-300 h-screen flex justify-center">
+    <div className="flex flex-col justify-center">
+      <div className="rounded-lg bg-white w-80 text-center p-2 h-max px-4">
+        <Heading label={"Sign in"} />
+        <SubHeading label={"Enter your credentials to access your account"} />
+        <InputBox placeholder="JohnDoe@gmail.com" label={"Email"} onChange={(e)=>{
             setUserName(e.target.value)
-        }}/><br /><br />
-        <label htmlFor="Password">Password:</label><input type="password" onChange={(e)=>{
+        }}/>
+        <InputBox placeholder="123456" label={"Password"} onChange={(e)=>{
             setPassword(e.target.value)
-        }} /><br /><br />
-
-        <button type="submit" onClick={()=>{
+        }}/>
+        <div className="pt-4">
+          <Button label={"Sign in"} onClick={()=>{
             axios({
                 url:"http://localhost:3000/api/v1/user/signin",
                 method:"POST",
@@ -26,17 +33,16 @@ export const SignIn = ()=>{
                     password:password
                 }
             }).then((res)=>{
-                console.log(res.data.authorization)
                 navigator("/dashboard")
-                //localStorage['header'] = res.data.authorization
                 localStorage.setItem('authToken', res.data.authorization);
             }).catch((error)=>{
                 console.log(error)
             })
-        }}> Sign In</button>
-         <div>
-            Don't have an account? <a href="/signup">Sign Up</a>
+        }}/>
         </div>
+        <BottomWarning label={"Don't have an account?"} buttonText={"Sign up"} to={"/signup"} />
       </div>
-    </>
+    </div>
+  </div>
+    
 }
