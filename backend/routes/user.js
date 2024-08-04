@@ -7,6 +7,7 @@ const {JWT_SECRET} = require('../config')
 const { authMiddleware } = require('../middleware')
 
 router.post("/signup",async (req, res)=>{
+    console.log(req.body)
     const parsePayLoad = userType.safeParse(req.body)
     if (!parsePayLoad.success){
          res.status(411).json({
@@ -15,7 +16,7 @@ router.post("/signup",async (req, res)=>{
         return
     }
     
-    let u = await users.findOne(createPayLoad)
+    let u = await users.findOne(req.body)
     if (u != null){
         res.status(409).json({
         msg:"UserName is already exist"
@@ -25,10 +26,10 @@ router.post("/signup",async (req, res)=>{
 
     try {
         u = await users.create({
-        username:createPayLoad.username,
-        firstName:createPayLoad.firstName,
-        lastName:createPayLoad.lastName,
-        password:createPayLoad.password
+        username:req.body.username,
+        firstName:req.body.firstName,
+        lastName:req.body.lastName,
+        password:req.body.password
     })
     } catch (error) {
        res.status(411).json({
