@@ -3,12 +3,21 @@ import { useNavigate } from "react-router-dom";
 import { Button } from "./Button"
 import axios from 'axios'
 
-export const Users = ({Users}) => {
-    const[filter,setFilter] = useState("all")
-    const[users, setUsers] = useState([])
+function useDebounceValue(filter, value){
+    const [debounceValue, setDebounceValue] = useState()
+    useEffect(()=>{
+      const timerId = setTimeout(()=>{
+       setDebounceValue(filter)
+      },value)
+      return ()=>clearTimeout(timerId)
+    },[filter, value])
+    return debounceValue
+}
 
+function useGetAllUsers(debounceValue){
+    const[users, setUsers] = useState([])
     useEffect(() => {
-        axios.get("http://localhost:3000/api/v1/user/bulk?filter=" + filter,
+        axios.get("http://localhost:3000/api/v1/user/bulk?filter=" + debounceValue,
             {
                 headers:{
                     Authorization:localStorage.getItem('authToken')
@@ -18,7 +27,14 @@ export const Users = ({Users}) => {
             const result = response.data.userList;
             setUsers(result);
         })
-    }, [filter])
+    }, [debounceValue])
+    return  users
+}
+
+export const Users = ({Users}) => {
+    const[filter,setFilter] = useState("all")
+    const debounceValue = useDebounceValue(filter,500)
+    const users = useGetAllUsers(debounceValue)
 
     return <>
         <div className="font-bold mt-6 text-lg">

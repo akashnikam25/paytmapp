@@ -4,10 +4,9 @@ import { Users } from './Users'
 import { Appbar } from './Appbar'
 import { Balance } from './Balance'
 
-
-export const Dashboard = ()=>{
+function useBalance(){
     const[balance, setBalance] = useState([])
-     axios.get("http://localhost:3000/api/v1/account/balance",
+    axios.get("http://localhost:3000/api/v1/account/balance",
             {
                 headers:{
                     Authorization:localStorage.getItem('authToken')
@@ -16,7 +15,11 @@ export const Dashboard = ()=>{
         ).then(response => {
             const result = response.data.Balance;
             setBalance(result);
-        })
+     })
+     return balance
+}
+export const Dashboard = ()=>{
+     const balance = useBalance()
     return <div>
         <Appbar />
         <div className="m-8">
